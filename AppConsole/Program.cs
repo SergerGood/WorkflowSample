@@ -5,9 +5,9 @@ using WorkflowCore.Interface;
 
 namespace AppConsole
 {
-    class Program
+    internal class Program
     {
-        static async Task Main(string[] args)
+        private static async Task Main(string[] args)
         {
             IServiceCollection services = new ServiceCollection();
             services.AddLogging();
@@ -16,10 +16,10 @@ namespace AppConsole
             var serviceProvider = services.BuildServiceProvider();
 
             var host = serviceProvider.GetService<IWorkflowHost>();
-            host.RegisterWorkflow<AppWorkflow>();
+            host.RegisterWorkflow<AppWorkflow, Data>();
             host.Start();
 
-            await host.StartWorkflow("HelloWord", 1, null);
+            await host.StartWorkflow("HelloWord", 1, new Data {Value = 1});
 
             Console.ReadLine();
             host.Stop();
