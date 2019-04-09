@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using WorkflowCore.Interface;
+using WorkflowCore.Models;
 
 namespace AppConsole
 {
@@ -19,6 +20,7 @@ namespace AppConsole
             var host = serviceProvider.GetService<IWorkflowHost>();
             host.RegisterWorkflow<AppWorkflow, Data>();
             host.Start();
+            host.OnStepError += OnStepError;
 
             await host.StartWorkflow(Consts.AppWorkflowId, 1, new Data {Value = 1});
             await host.StartWorkflow(Consts.AppWorkflowId, 1, new Data {Value = 2});
@@ -31,6 +33,11 @@ namespace AppConsole
 
             Console.ReadLine();
             host.Stop();
+        }
+
+        private static void OnStepError(WorkflowInstance workflow, WorkflowStep step, Exception exception)
+        {
+            Console.WriteLine($"error {exception.Message} in step {step.Name}");
         }
     }
 }
