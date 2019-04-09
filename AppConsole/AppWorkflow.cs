@@ -6,7 +6,7 @@ namespace AppConsole
 {
     public class AppWorkflow : IWorkflow<Data>
     {
-        public string Id => "HelloWord";
+        public string Id => Consts.AppWorkflowId;
         public int Version => 1;
 
         public void Build(IWorkflowBuilder<Data> builder)
@@ -16,6 +16,7 @@ namespace AppConsole
                 .Input(initStep => initStep.Input1, data => data.Value)
                 .Input(initStep => initStep.Input2, data => data.Value)
                 .Output(data => data.Result, step => step.Output)
+                .WaitFor(Consts.WaitingEvent, (data, context) => "0", data => new DateTime(1500, 1, 1))
                 .Then(context =>
                 {
                     Console.WriteLine("Stop");
