@@ -20,6 +20,7 @@ namespace AppConsole
             host.Start();
 
             await host.StartWorkflow("HelloWord", 1, new Data {Value = 1});
+            await host.StartWorkflow("HelloWord", 1, new Data { Value = 2 });
 
             Console.ReadLine();
             host.Stop();
